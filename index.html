@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thiết Lập Mục Tiêu</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--navy:#243267;--navy-light:#2e3f80;--navy-dark:#1a2550;--yellow:#ffde59;--yellow-light:#fff9d6;--yellow-dark:#e6c800;--white:#fff;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g500:#6b7280;--g600:#4b5563;--g800:#1f2937;--shadow:0 2px 16px rgba(36,50,103,0.10);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:linear-gradient(150deg,var(--navy-dark),var(--navy) 60%,#1e3a5f);min-height:100vh;color:var(--g800);}
+.hero{background:linear-gradient(135deg,var(--navy-dark),var(--navy));padding:40px 20px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:var(--yellow);border-radius:50%;opacity:.08;}
+.hero::after{content:'';position:absolute;bottom:-30px;left:-30px;width:150px;height:150px;background:var(--yellow);border-radius:50%;opacity:.06;}
+.hero-badge{display:inline-block;background:var(--yellow);color:var(--navy-dark);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:16px;}
+.hero h1{color:#fff;font-size:clamp(20px,5vw,36px);font-weight:800;line-height:1.25;margin-bottom:10px;position:relative;z-index:1;}
+.hero h1 span{color:var(--yellow);}
+.hero p{color:rgba(255,255,255,.7);font-size:clamp(12px,2.5vw,15px);max-width:480px;margin:0 auto;position:relative;z-index:1;}
+.tab-nav{background:#fff;display:flex;box-shadow:0 2px 10px rgba(36,50,103,.1);position:sticky;top:0;z-index:100;overflow-x:auto;}
+.tab-nav::-webkit-scrollbar{height:0;}
+.tab-btn{flex:1;min-width:0;padding:14px 8px;border:none;background:transparent;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:var(--g600);cursor:pointer;transition:all .2s;border-bottom:3px solid transparent;white-space:nowrap;text-align:center;}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--yellow);background:var(--yellow-light);}
+.tab-btn:hover:not(.active){background:var(--g50);color:var(--navy);}
+.main{max-width:860px;margin:0 auto;padding:24px 12px 60px;}
+.form-panel{display:none;}
+.form-panel.active{display:block;}
+.card{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;}
+.card-header{background:var(--navy);color:#fff;padding:12px 18px;font-size:12px;font-weight:700;letter-spacing:.4px;display:flex;align-items:center;gap:8px;}
+.card-header .dot{width:7px;height:7px;background:var(--yellow);border-radius:50%;flex-shrink:0;}
+.card-body{padding:20px;}
+.form-title{background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff;padding:18px 20px;text-align:center;font-size:clamp(13px,3vw,18px);font-weight:800;letter-spacing:.3px;}
+.form-title small{display:block;font-size:clamp(11px,2vw,13px);font-weight:500;opacity:.85;margin-top:4px;}
+.field-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.field-row label{font-size:12px;font-weight:600;color:var(--navy);white-space:nowrap;min-width:72px;padding-top:6px;}
+.field-row input,.field-row textarea{flex:1;min-width:160px;border:none;border-bottom:2px solid var(--g300);outline:none;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--g800);padding:5px 3px;background:transparent;transition:border-color .2s;resize:none;overflow:hidden;line-height:1.6;word-break:break-word;}
+.field-row input:focus,.field-row textarea:focus{border-bottom-color:var(--navy);}
+.checkbox-group{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.cb-item{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.cb-item input[type=checkbox]{width:17px;height:17px;min-width:17px;accent-color:var(--navy);cursor:pointer;}
+.cb-item span{font-size:13px;font-weight:500;}
+.fi{width:100%;border:none;border-bottom:1.5px solid var(--g300);font-family:'Montserrat',sans-serif;font-size:12px;padding:4px 2px;background:transparent;outline:none;color:var(--g800);resize:none;overflow:hidden;line-height:1.6;display:block;word-break:break-word;}
+.fi:focus{border-bottom-color:var(--navy);}
+.fi-sm{min-height:28px;}
+.fi-md{min-height:52px;}
+.badge{display:inline-flex;align-items:center;justify-content:center;background:var(--yellow);color:var(--navy-dark);font-weight:800;font-size:11px;padding:3px 12px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
+.step-list{display:flex;flex-direction:column;gap:12px;}
+.step-card{border:1.5px solid var(--g200);border-radius:10px;overflow:hidden;}
+.step-card-top{display:flex;align-items:flex-start;gap:10px;background:var(--g50);padding:10px 14px;border-bottom:1px solid var(--g200);}
+.q-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.q-sub{font-size:11px;color:var(--g600);line-height:1.5;}
+.step-card-body{padding:10px 14px;}
+.hint{font-size:11px;color:var(--g500);font-style:italic;margin-bottom:6px;}
+.row-card{border:1.5px solid var(--g200);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.row-card-head{background:var(--navy);color:#fff;padding:9px 14px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.row-card-fields{padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+.field-label{font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;opacity:.75;}
+.check-card{border:1.5px solid var(--g200);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.check-card-head{background:var(--g50);padding:10px 14px;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:10px;}
+.check-card-body{padding:10px 14px;display:flex;flex-direction:column;gap:8px;}
+.check-q{font-size:11px;color:var(--g600);line-height:1.5;}
+.woop-card{border:1.5px solid var(--g200);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.woop-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--g50);border-bottom:1px solid var(--g200);}
+.woop-body{padding:10px 14px;display:flex;flex-direction:column;gap:6px;}
+.goal-box{background:linear-gradient(135deg,var(--yellow-light),#fffbe6);border:2px solid var(--yellow);border-radius:10px;padding:18px;margin-top:6px;}
+.goal-flow{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;line-height:2.2;}
+.goal-flow span{font-size:13px;font-weight:600;color:var(--navy-dark);}
+.gi{border:none;border-bottom:2px solid var(--navy);background:transparent;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--navy-dark);outline:none;padding:2px 4px;min-width:90px;max-width:100%;}
+.sig-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sig-box{border:1.5px dashed var(--g300);border-radius:10px;padding:18px;text-align:center;}
+.sig-box .sl{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.sig-box .ss{font-size:11px;color:var(--g600);margin-bottom:14px;}
+.sig-box input{width:100%;border:none;border-bottom:1.5px solid var(--g300);font-family:'Montserrat',sans-serif;font-size:12px;padding:4px 0;text-align:center;outline:none;background:transparent;}
+.ri{width:54px;border:1.5px solid var(--g300);border-radius:6px;padding:4px 6px;text-align:center;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;flex-shrink:0;}
+.ri:focus{border-color:var(--navy);}
+.if-then-list{display:flex;flex-direction:column;gap:10px;}
+.if-then-row{display:flex;align-items:flex-start;gap:10px;}
+.if-tag{background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;white-space:nowrap;margin-top:2px;}
+.week-block{margin-bottom:14px;}
+.week-label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.note-box{background:var(--yellow-light);border-left:3px solid var(--yellow-dark);padding:10px 14px;font-size:11px;color:var(--navy-dark);font-style:italic;}
+.day-card{border:1.5px solid var(--g200);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.day-head{display:flex;align-items:center;gap:10px;background:var(--navy);padding:10px 14px;}
+.day-content{padding:12px 14px;background:var(--g50);font-size:12px;color:var(--g600);line-height:1.8;border-bottom:1px solid var(--g200);}
+.day-footer{padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+.day-status{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.day-status-label{font-size:11px;font-weight:700;color:var(--navy);}
+.day-cb{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;font-weight:600;}
+.day-note{display:flex;align-items:flex-start;gap:8px;}
+.day-note-lbl{font-size:11px;font-weight:700;color:var(--navy);white-space:nowrap;padding-top:4px;}
+.actions-row{display:flex;justify-content:center;padding:8px 0 16px;}
+.btn-dl{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,var(--yellow),var(--yellow-dark));color:var(--navy-dark);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;padding:15px 32px;border:none;border-radius:50px;cursor:pointer;box-shadow:0 6px 20px rgba(255,222,89,.4);transition:all .2s;text-transform:uppercase;letter-spacing:.4px;}
+.btn-dl:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,222,89,.5);}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(36,50,103,.75);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#fff;font-family:'Montserrat',sans-serif;}
+.loading-overlay.show{display:flex;}
+.spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:var(--yellow);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:600px){
+  .card-body{padding:14px;}
+  .card-header{font-size:11px;padding:10px 14px;}
+  .hero{padding:28px 14px 40px;}
+  .main{padding:16px 10px 50px;}
+  .tab-btn{font-size:10px;padding:12px 6px;}
+  .btn-dl{font-size:12px;padding:13px 22px;}
+  .sig-row{grid-template-columns:1fr;}
+  .goal-flow span,.gi{font-size:12px;}
+}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div style="font-size:14px;font-weight:600;">Đang tạo file PDF...</div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🎯 Goal Setting System</div>
+  <h1>Hệ Thống <span>Thiết Lập</span><br>Mục Tiêu Cá Nhân</h1>
+  <p>Điền đầy đủ thông tin vào các form bên dưới và tải về bản PDF của bạn</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(1)">📋 Form 1</button>
+  <button class="tab-btn" onclick="switchTab(2)">📊 Form 2</button>
+  <button class="tab-btn" onclick="switchTab(3)">🎧 Form 3</button>
+</div>
+
+<div class="main">
+
+<!-- ═══ FORM 1 ═══ -->
+<div class="form-panel active" id="panel1">
+  <div class="card">
+    <div class="form-title">FORM HƯỚNG DẪN THIẾT LẬP MỤC TIÊU</div>
+    <div class="card-body">
+      <div class="field-row"><label>Họ và tên:</label><input type="text" placeholder="Nhập họ và tên..."></div>
+      <div class="field-row"><label>Vị trí:</label><input type="text" placeholder="Nhập vị trí..."></div>
+      <div class="field-row"><label>Ngày lập:</label><input type="text" placeholder="__/__/2026"></div>
+      <div style="margin-top:6px;">
+        <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">Mảng mục tiêu: <span style="font-weight:400;">(chọn tối đa 02 mảng)</span></div>
+        <div class="checkbox-group">
+          <label class="cb-item"><input type="checkbox"><span>Sự nghiệp</span></label>
+          <label class="cb-item"><input type="checkbox"><span>Tài chính</span></label>
+          <label class="cb-item"><input type="checkbox"><span>Sức khỏe</span></label>
+          <label class="cb-item"><input type="checkbox"><span>Gia đình</span></label>
+          <label class="cb-item"><input type="checkbox"><span>Học tập</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN 1: XÂY DỰNG TẦM NHÌN & LỘ TRÌNH THỰC THI</div>
+    <div class="card-body">
+      <div class="step-list">
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 1</span><div><div class="q-title">Hình ảnh phiên bản bạn muốn trở thành:</div><div class="q-sub">(Trong 6-12 tháng tới, kỹ năng, thái độ, phong cách làm việc của bạn ra sao?)</div></div></div>
+          <div class="step-card-body"><div class="hint">Ví dụ: Một PT chuyên nghiệp, điềm tĩnh, là chuyên gia tư vấn dinh dưỡng được khách hàng tin cậy.</div><textarea class="fi fi-md" placeholder="Nhập nội dung..."></textarea></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 2</span><div><div class="q-title">Xác định Goal (Mục tiêu tổng quát):</div><div class="q-sub">(Kết quả lớn nhất bạn muốn đạt được là gì?)</div></div></div>
+          <div class="step-card-body"><div class="hint">Ví dụ: Xây dựng tệp khách hàng trung thành và ổn định thu nhập cao.</div><textarea class="fi fi-md" placeholder="Nhập nội dung..."></textarea></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 3</span><div><div class="q-title">Thời hạn hoàn thành:</div><div class="q-sub">(Ngày/Tháng/Năm)</div></div></div>
+          <div class="step-card-body"><div class="hint">Hạn chót: __/__/2026</div><textarea class="fi fi-sm" placeholder="__/__/2026"></textarea></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 4</span><div><div class="q-title">Danh sách Objectives (3-5 hành động quan trọng):</div><div class="q-sub">(Bạn sẽ làm gì để đạt được Goal trên?)</div></div></div>
+          <div class="step-card-body">
+            <textarea class="fi fi-sm" placeholder="1. ..."></textarea>
+            <textarea class="fi fi-sm" placeholder="2. ..."></textarea>
+            <textarea class="fi fi-sm" placeholder="3. ..."></textarea>
+            <textarea class="fi fi-sm" placeholder="4. ..."></textarea>
+            <textarea class="fi fi-sm" placeholder="5. ..."></textarea>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 5</span><div><div class="q-title">Chỉ số đo lường (KPI):</div><div class="q-sub">(Số buổi dạy, doanh thu, tỷ lệ...)</div></div></div>
+          <div class="step-card-body"><div class="hint">Ví dụ: Doanh thu đạt 50tr/tháng; Tỷ lệ khách tái ký &gt; 85%.</div><textarea class="fi fi-md" placeholder="Nhập chỉ số KPI..."></textarea></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 6</span><div><div class="q-title">Hành động 72 giờ (Key Cam kết Mềm):</div><div class="q-sub">(Việc nhỏ nhất nhưng quan trọng nhất bạn sẽ làm ngay trong 3 ngày tới)</div></div></div>
+          <div class="step-card-body"><div class="hint">Ví dụ: Đăng ký khóa học dinh dưỡng; Gọi điện cho 5 khách cũ.</div><textarea class="fi fi-md" placeholder="Nhập hành động..."></textarea></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><span class="badge">Bước 7</span><div><div class="q-title">Cơ chế Review &amp; Buddy:</div><div class="q-sub">(Bạn sẽ tự kiểm tra vào lúc nào? Ai là người đồng hành/giám sát bạn?)</div></div></div>
+          <div class="step-card-body"><div class="hint">Ví dụ: Review tối Chủ nhật hàng tuần cùng Trưởng cơ sở.</div><textarea class="fi fi-md" placeholder="Nhập cơ chế..."></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN 2: BẢN CAM KẾT (PERSONAL GOAL TEMPLATE)</div>
+    <div class="card-body">
+      <div style="font-size:12px;color:var(--g600);margin-bottom:10px;font-style:italic;">Dựa trên các thông tin ở trên, hãy viết lại thành một câu tuyên bố duy nhất:</div>
+      <div class="goal-box">
+        <div class="goal-flow">
+          <span>"Trong</span><input class="gi" style="width:100px;" placeholder="[Thời gian]">
+          <span>, tôi cam kết đạt</span><input class="gi" style="width:150px;" placeholder="[Goal/Target]">
+          <span>để trở thành</span><input class="gi" style="width:170px;" placeholder="[Con người muốn trở thành]">
+          <span>và tôi bắt đầu ngay bằng</span><input class="gi" style="width:190px;" placeholder="[Hành động đầu tiên trong 72h]">
+          <span>"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN 3: XÁC NHẬN</div>
+    <div class="card-body">
+      <div class="sig-row">
+        <div class="sig-box"><div class="sl">Chữ ký nhân sự</div><div class="ss">(Ký và ghi rõ họ tên)</div><input type="text" placeholder="Họ và tên..."></div>
+        <div class="sig-box"><div class="sl">Chữ ký Buddy</div><div class="ss">(Ký và ghi rõ họ tên)</div><input type="text" placeholder="Họ và tên..."></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button class="btn-dl" onclick="downloadPDF('panel1','Form1_Huong_Dan_Thiet_Lap_Muc_Tieu.pdf')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>Tải PDF – Form 1
+    </button>
+  </div>
+</div>
+
+<!-- ═══ FORM 2 ═══ -->
+<div class="form-panel" id="panel2">
+  <div class="card">
+    <div class="form-title">FORM THIẾT LẬP MỤC TIÊU CÁ NHÂN CHO PT<small>Quy trình: SMART – WOOP – ACTION</small></div>
+    <div class="card-body">
+      <div class="field-row"><label>Họ tên:</label><input type="text" placeholder="Nhập họ và tên..."></div>
+      <div class="field-row"><label>PT tại:</label><input type="text" placeholder="Tên cơ sở..."></div>
+      <div class="field-row"><label>Ngày lập:</label><input type="text" placeholder="__/__/2026"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN A – GOAL | OBJECTIVES | TARGETS</div>
+    <div class="card-body"><div id="sectionA"></div><div class="note-box">⚠️ Ghi ý: Chỉ 1 mảng quan trọng nhất để đặt làm chủ đề chính để phát triển toàn diện hơn.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN B – CHECKLIST SMART CHO OBJECTIVE CHÍNH</div>
+    <div class="card-body" id="sectionB"></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN C – NGUYÊN TẮC COACHABILITY (5C FRAMEWORK)</div>
+    <div class="card-body" id="sectionC"></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN D – PHÂN TÍCH WOOP & CHIẾN LƯỢC HIỆN THỰC HÓA</div>
+    <div class="card-body" id="sectionD"></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN E – ACTION IMPLEMENTATION (IF – THEN)</div>
+    <div class="card-body">
+      <div class="if-then-list">
+        <div class="if-then-row"><span class="if-tag">IF 1</span><textarea class="fi fi-sm" style="flex:1;" placeholder="Nếu... thì tôi sẽ..."></textarea></div>
+        <div class="if-then-row"><span class="if-tag">IF 2</span><textarea class="fi fi-sm" style="flex:1;" placeholder="Nếu... thì tôi sẽ..."></textarea></div>
+        <div class="if-then-row"><span class="if-tag">IF 3</span><textarea class="fi fi-sm" style="flex:1;" placeholder="Nếu... thì tôi sẽ..."></textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>PHẦN F – LỊCH ACTION TUẦN ĐẦU TIÊN</div>
+    <div class="card-body">
+      <div class="week-block"><div class="week-label">Stock tuần cho mục tiêu</div>
+        <textarea class="fi fi-sm" placeholder="Stock 1: ..."></textarea>
+        <textarea class="fi fi-sm" placeholder="Stock 2: ..."></textarea>
+        <textarea class="fi fi-sm" placeholder="Stock 3: ..."></textarea>
+      </div>
+      <div class="week-block"><div class="week-label">Rèn luyện hàng tuần</div>
+        <textarea class="fi fi-sm" placeholder="Thứ ...: ..."></textarea>
+        <textarea class="fi fi-sm" placeholder="Thứ ...: ..."></textarea>
+      </div>
+      <div class="week-block"><div class="week-label">Review hàng ngày</div>
+        <textarea class="fi fi-md" placeholder="Ghi chú review hàng ngày..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="dot"></div>XÁC NHẬN & KÝ TÊN</div>
+    <div class="card-body">
+      <div class="sig-row">
+        <div class="sig-box"><div class="sl">Chữ ký nhân sự</div><div class="ss">(Ký và ghi rõ họ tên)</div><input type="text" placeholder="Họ và tên..."></div>
+        <div class="sig-box"><div class="sl">Chữ ký Buddy</div><div class="ss">(Ký và ghi rõ họ tên)</div><input type="text" placeholder="Họ và tên..."></div>
+      </div>
+    </div>
+  </div>
+  <div class="actions-row">
+    <button class="btn-dl" onclick="downloadPDF('panel2','Form2_Thiet_Lap_Muc_Tieu_PT.pdf')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>Tải PDF – Form 2
+    </button>
+  </div>
+</div>
+
+<!-- ═══ FORM 3 ═══ -->
+<div class="form-panel" id="panel3">
+  <div class="card">
+    <div class="form-title" style="background:linear-gradient(135deg,#b5282a,#d63031);">THỬ THÁCH LẮNG NGHE TÍCH CỰC TRONG 7 NGÀY</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--g600);margin-bottom:16px;line-height:1.7;">Hoàn thành thử thách mỗi ngày, đánh dấu tình trạng và ghi chú cảm nhận của bạn.</p>
+      <div id="dayCards"></div>
+    </div>
+  </div>
+  <div class="actions-row">
+    <button class="btn-dl" onclick="downloadPDF('panel3','Form3_Lang_Nghe_Tich_Cuc_7_Ngay.pdf')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>Tải PDF – Form 3
+    </button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const smartItems=[
+  {code:'S',label:'Specific – Cụ thể',q:'Objective đã rõ ràng, cụ thể, có ai đó, cái gì, ở đâu chưa?'},
+  {code:'M',label:'Measurable – Đo lường',q:'Có con số cụ thể để đo lường không?'},
+  {code:'A',label:'Achievable – Khả thi',q:'Objective này có thực tế với nguồn lực hiện tại không?'},
+  {code:'R',label:'Relevant – Liên quan',q:'Objective này phù hợp với Goal lớn và cuộc sống bạn muốn không?'},
+  {code:'T',label:'Time-bound – Thời hạn',q:'Objective này có ngày hoàn thành cụ thể không?'},
+];
+const c5Items=[
+  {label:'Clarity – Rõ ràng',q:'Huấn luyện PT đặt ra bài toán, mong muốn kết quả rõ ràng? PT biết mình nên làm gì không?'},
+  {label:'Challenge – Thách thức',q:'Huấn luyện có đặt các mục "stretch" và biết mình nên làm như thế để đạt được thách thức cam kết đó không?'},
+  {label:'Commitment – Cam kết',q:'Bạn làm điều này có dễ dàng không? Đặt xem xét lại? Có những kế hoạch dự phòng không?'},
+  {label:'Feedback – Phản hồi tích cực',q:'Bạn có nhìn lại mục tiêu này thế nào? Có thay đổi các bước theo tình huống không?'},
+  {label:'Complexity – Độ phức tạp',q:'Mục tiêu này có dễ đạt không? Nếu có, nó có thực sự thách thức và cần các bước cụ thể nào để giải quyết không?'},
+];
+const woopItems=[
+  {code:'W – WISH',sub:'Mong muốn',q:'Điều PT mong muốn đạt được với Objective trong 6-12 tháng tới là gì?',ph:'Nhập mong muốn...'},
+  {code:'O – OUTCOME',sub:'Kết quả',q:'Nếu đạt được, cuộc sống của PT thay đổi thế nào?',ph:'Nhập kết quả kỳ vọng...'},
+  {code:'O – OBSTACLE',sub:'Trở ngại',q:'Điều gì sẽ CẢN TRỞ LỚN NHẤT (bên ngoài/bên trong) trên con đường này?',ph:'Nhập trở ngại...'},
+  {code:'P – PLAN',sub:'Kế hoạch',q:'Nếu gặp trở ngại đó, bạn sẽ làm gì? "Nếu... thì tôi sẽ..."',ph:'Nếu... thì tôi sẽ...'},
+];
+const days=[
+  {thu:'Thứ Hai',mucDich:'Ghi nhớ câu nói cuối cùng',nd:'Đặt mục tiêu là có thể lặp lại điều cuối cùng mà mỗi người đã nói trong cuộc họp của bạn. Điều này giúp bạn tập trung vào từng câu phát biểu mà không bị phân tâm cho đến khi đến lượt bạn phát biểu.'},
+  {thu:'Thứ Ba',mucDich:'Nói ít hơn',nd:'Cố gắng khuyến khích người khác đưa ra ý tưởng và giải pháp trước khi thêm ý tưởng và giải pháp của riêng bạn. Hãy cố thực hiện 80% việc nghe và 20% việc nói khi tương tác với người khác.'},
+  {thu:'Thứ Tư',mucDich:'Đợi 3 giây',nd:'Hãy thoải mái với sự im lặng trong cuộc trò chuyện bằng cách cố gắng đợi đủ 3 giây trước khi trả lời. Điều này sẽ cho bạn cơ hội nghĩ ra câu trả lời chu đáo sau khi người đang nói chuyện với bạn kết thúc.'},
+  {thu:'Thứ Năm',mucDich:'Ghi chép',nd:'Nhằm mục đích nâng cao kỹ năng nghe của bạn bằng cách đặt mục tiêu ghi chép trong tất cả các cuộc họp bạn tham dự. Không cần chia sẻ ghi chú với nhóm, chỉ cần ghi lại những gì mọi người đang nói, cả sự thật, cảm xúc và giá trị họ đang thể hiện.'},
+  {thu:'Thứ Sáu',mucDich:'Xây dựng câu hỏi',nd:'Chống lại sự thôi thúc đưa ra gợi ý hoặc giải pháp và cố gắng trả lời mọi người bằng những câu hỏi mở, chân thành. Điều này không chỉ yêu cầu bạn phải chăm chú lắng nghe mà còn thường khiến đồng nghiệp suy nghĩ về đóng góp của họ theo một cách mới.'},
+  {thu:'Thứ Bảy',mucDich:'Tóm tắt',nd:'Tạo thói quen trình bày lại những điểm chính mà bạn đã nghe người khác đóng góp và hỏi xem bạn tóm tắt có chính xác không. Điều này cải thiện kỹ năng lắng nghe tích cực và giúp người khác xác nhận suy nghĩ của họ được tiếp nhận đúng.'},
+  {thu:'Chủ Nhật',mucDich:'Công nghệ Im lặng',nd:'Sau một tuần dài, hãy ưu tiên các cuộc trò chuyện trực tiếp mà không bị điện thoại và máy tính làm phiền. Điều này mang đến cơ hội tập hành tất cả các kỹ năng bạn đã thành thạo trong tuần qua và nạp lại năng lượng cho tuần tới.'},
+];
+
+function buildA(){
+  document.getElementById('sectionA').innerHTML=[1,2,3].map(n=>`
+    <div class="row-card">
+      <div class="row-card-head"><span class="badge" style="font-size:10px;">Mảng ${n}</span>
+        <textarea class="fi fi-sm" style="flex:1;background:transparent;color:#fff;border-bottom-color:rgba(255,255,255,.4);" placeholder="Tên mảng..."></textarea>
+      </div>
+      <div class="row-card-fields">
+        <div><div class="field-label">Goal (1–3 năm) – Phải tôi muốn đạt được điều gì?</div><textarea class="fi fi-md" placeholder="Nhập goal..."></textarea></div>
+        <div><div class="field-label">Objectives (SMART, 6-12 tháng) – Cần làm và thời điểm đạt được?</div><textarea class="fi fi-md" placeholder="Nhập objective..."></textarea></div>
+        <div><div class="field-label">Targets / KPI – Bao nhiêu? Đến khi nào?</div><textarea class="fi fi-md" placeholder="Nhập target/KPI..."></textarea></div>
+      </div>
+    </div>`).join('');
+}
+function buildB(){
+  document.getElementById('sectionB').innerHTML=smartItems.map(it=>`
+    <div class="check-card">
+      <div class="check-card-head">
+        <span class="badge">${it.code}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--navy);flex:1;">${it.label}</span>
+        <input class="ri" placeholder="✓/✗">
+      </div>
+      <div class="check-card-body">
+        <div class="check-q">${it.q}</div>
+        <div><div class="field-label">Ghi chú</div><textarea class="fi fi-sm" placeholder="Ghi chú..."></textarea></div>
+      </div>
+    </div>`).join('');
+}
+function buildC(){
+  document.getElementById('sectionC').innerHTML=c5Items.map((it,i)=>`
+    <div class="check-card">
+      <div class="check-card-head">
+        <span class="badge">${i+1}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--navy);flex:1;">${it.label}</span>
+        <input class="ri" placeholder="1-5">
+      </div>
+      <div class="check-card-body">
+        <div class="check-q">${it.q}</div>
+        <div><div class="field-label">Ghi chú cụ thể</div><textarea class="fi fi-sm" placeholder="Ghi chú..."></textarea></div>
+      </div>
+    </div>`).join('');
+}
+function buildD(){
+  document.getElementById('sectionD').innerHTML=woopItems.map(it=>`
+    <div class="woop-card">
+      <div class="woop-head">
+        <span class="badge">${it.code}</span>
+        <span style="font-size:11px;color:var(--g600);">${it.sub}</span>
+      </div>
+      <div class="woop-body">
+        <div style="font-size:11px;color:var(--g600);line-height:1.6;">${it.q}</div>
+        <textarea class="fi fi-md" placeholder="${it.ph}"></textarea>
+      </div>
+    </div>`).join('');
+}
+function buildDays(){
+  document.getElementById('dayCards').innerHTML=days.map(d=>`
+    <div class="day-card">
+      <div class="day-head">
+        <span class="badge">${d.thu}</span>
+        <span style="color:#fff;font-weight:700;font-size:12px;">${d.mucDich}</span>
+      </div>
+      <div class="day-content">${d.nd}</div>
+      <div class="day-footer">
+        <div class="day-status">
+          <span class="day-status-label">Tình trạng:</span>
+          <label class="day-cb"><input type="checkbox" style="width:16px;height:16px;accent-color:#22c55e;"> <span style="color:#16a34a;">Hoàn thành ✓</span></label>
+          <label class="day-cb"><input type="checkbox" style="width:16px;height:16px;accent-color:#ef4444;"> <span style="color:#dc2626;">Chưa làm ✗</span></label>
+        </div>
+        <div class="day-note">
+          <span class="day-note-lbl">Note:</span>
+          <textarea class="fi fi-sm" style="flex:1;" placeholder="Ghi cảm nhận / bài học rút ra..."></textarea>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function initResize(){
+  document.querySelectorAll('textarea').forEach(ta=>{
+    if(!ta._resizeBound){ta.addEventListener('input',()=>autoResize(ta));ta._resizeBound=true;}
+    autoResize(ta);
+  });
+}
+function switchTab(n){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+  document.querySelectorAll('.form-panel').forEach((p,i)=>p.classList.toggle('active',i===n-1));
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(initResize,60);
+}
+async function downloadPDF(panelId,filename){
+  const overlay=document.getElementById('loadingOverlay');
+  overlay.classList.add('show');
+  try{
+    const panel=document.getElementById(panelId);
+    panel.querySelectorAll('textarea').forEach(ta=>{ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';});
+    const canvas=await html2canvas(panel,{scale:2,useCORS:true,logging:false,backgroundColor:'#f9fafb',windowWidth:860});
+    panel.querySelectorAll('textarea').forEach(ta=>autoResize(ta));
+    const{jsPDF}=window.jspdf;
+    const imgW=190,imgH=(canvas.height*imgW)/canvas.width,contentH=277;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    let yOff=0,page=0;
+    while(yOff<imgH){
+      if(page>0)pdf.addPage();
+      const srcY=(yOff/imgH)*canvas.height;
+      const sliceH=Math.min(contentH,imgH-yOff);
+      const sc=document.createElement('canvas');
+      sc.width=canvas.width;sc.height=(sliceH/imgH)*canvas.height;
+      sc.getContext('2d').drawImage(canvas,0,srcY,canvas.width,sc.height,0,0,canvas.width,sc.height);
+      pdf.addImage(sc.toDataURL('image/jpeg',.95),'JPEG',10,10,imgW,sliceH);
+      yOff+=contentH;page++;
+    }
+    pdf.save(filename);
+  }catch(e){console.error(e);alert('Có lỗi khi tạo PDF.');}
+  overlay.classList.remove('show');
+}
+
+buildA();buildB();buildC();buildD();buildDays();
+setTimeout(initResize,150);
+</script>
+</body>
+</html>
