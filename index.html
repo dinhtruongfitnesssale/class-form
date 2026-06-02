@@ -20,7 +20,7 @@ body{font-family:'Montserrat',sans-serif;background:linear-gradient(150deg,var(-
 .hero p{color:rgba(255,255,255,.7);font-size:clamp(12px,2.5vw,15px);max-width:480px;margin:0 auto;position:relative;z-index:1;}
 .tab-nav{background:#fff;display:flex;box-shadow:0 2px 10px rgba(36,50,103,.1);position:sticky;top:0;z-index:100;overflow-x:auto;}
 .tab-nav::-webkit-scrollbar{height:0;}
-.tab-btn{flex:1;min-width:0;padding:14px 8px;border:none;background:transparent;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:var(--g600);cursor:pointer;transition:all .2s;border-bottom:3px solid transparent;white-space:nowrap;text-align:center;}
+.tab-btn{flex:1;min-width:0;padding:10px 6px;border:none;background:transparent;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;color:var(--g600);cursor:pointer;transition:all .2s;border-bottom:3px solid transparent;white-space:normal;text-align:center;line-height:1.4;}
 .tab-btn.active{color:var(--navy);border-bottom-color:var(--yellow);background:var(--yellow-light);}
 .tab-btn:hover:not(.active){background:var(--g50);color:var(--navy);}
 .main{max-width:860px;margin:0 auto;padding:24px 12px 60px;}
@@ -137,10 +137,11 @@ body{font-family:'Montserrat',sans-serif;background:linear-gradient(150deg,var(-
 </div>
 
 <div class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab(1)">📋 Form 1</button>
-  <button class="tab-btn" onclick="switchTab(2)">📊 Form 2</button>
-  <button class="tab-btn" onclick="switchTab(3)">🎧 Form 3</button>
-  <button class="tab-btn" onclick="switchTab(4)">🤝 Form 4</button>
+  <button class="tab-btn active" onclick="switchTab(1)">🎯 Thiết lập<br>mục tiêu</button>
+  <button class="tab-btn" onclick="switchTab(2)">📊 SMART–<br>WOOP</button>
+  <button class="tab-btn" onclick="switchTab(3)">🎧 Lắng nghe<br>7 ngày</button>
+  <button class="tab-btn" onclick="switchTab(4)">🤝 Sức khỏe<br>MQH</button>
+  <button class="tab-btn" onclick="switchTab(5)">💎 Trust<br>Score</button>
 </div>
 
 <div class="main">
@@ -371,6 +372,108 @@ body{font-family:'Montserrat',sans-serif;background:linear-gradient(150deg,var(-
   <div class="actions-row">
     <button class="btn-dl" onclick="downloadPDF('panel4','Form4_Checklist_Suc_Khoe_MQH.pdf')">
       <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>Tải PDF – Form 4
+    </button>
+  </div>
+</div>
+
+<!-- ═══ FORM 5 ═══ -->
+<div class="form-panel" id="panel5">
+  <div class="card">
+    <div class="form-title" style="background:linear-gradient(135deg,#1a3a6b,#243267);">
+      BÀI KIỂM TRA CHỈ SỐ NIỀM TIN (TRUST SCORE) DÀNH CHO PT
+      <small>Thang điểm 1 (Rất kém) → 5 (Xuất sắc) cho mỗi câu hỏi</small>
+    </div>
+    <div class="card-body" style="padding:16px;">
+      <div class="field-row" style="margin-bottom:16px;">
+        <label>Họ tên PT:</label><input type="text" placeholder="Nhập họ và tên...">
+      </div>
+      <div class="field-row" style="margin-bottom:20px;">
+        <label>Ngày:</label><input type="text" placeholder="__/__/2026">
+      </div>
+      <p style="font-size:12px;color:var(--g600);line-height:1.7;margin-bottom:18px;background:var(--yellow-light);border-left:3px solid var(--yellow-dark);padding:10px 14px;border-radius:0 8px 8px 0;">Hãy chấm điểm bản thân trên thang từ 1 <em>(Rất kém)</em> đến 5 <em>(Xuất sắc)</em> cho mỗi câu hỏi dưới đây.</p>
+      <div id="trustSections"></div>
+
+      <!-- Score Result -->
+      <div style="margin-top:8px;">
+        <div style="background:var(--navy);color:#fff;border-radius:10px 10px 0 0;padding:12px 16px;font-size:13px;font-weight:800;">🧮 Cách tính điểm "Trust Score"</div>
+        <div style="background:var(--g50);border:1px solid var(--g200);border-top:none;padding:14px 16px;font-size:12px;color:var(--g600);line-height:1.8;">
+          <div style="margin-bottom:6px;">• <strong style="color:var(--navy);">Tổng (Uy tín + Tin cậy + Thân tình):</strong> Tối đa 45 điểm.</div>
+          <div style="margin-bottom:12px;">• <strong style="color:var(--navy);">Tổng điểm Vị kỷ:</strong> Thang từ 3 đến 15 điểm.</div>
+          <div style="background:#1a1a1a;color:#fff;border-radius:8px;padding:12px 16px;font-size:13px;font-style:italic;text-align:center;font-weight:600;letter-spacing:.3px;">
+            Trust = (Credibility + Reliability + Intimacy) ÷ Self-Orientation
+          </div>
+        </div>
+
+        <!-- Live Score Display -->
+        <div style="background:#fff;border:1px solid var(--g200);border-top:none;border-radius:0 0 10px 10px;padding:16px;">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+            <div style="flex:1;min-width:120px;background:var(--g50);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:var(--g500);text-transform:uppercase;margin-bottom:4px;">Uy tín</div>
+              <div id="ts_cred" style="font-size:22px;font-weight:900;color:var(--navy);">0</div><div style="font-size:10px;color:var(--g500);">/ 15</div>
+            </div>
+            <div style="flex:1;min-width:120px;background:var(--g50);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:var(--g500);text-transform:uppercase;margin-bottom:4px;">Tin cậy</div>
+              <div id="ts_reli" style="font-size:22px;font-weight:900;color:var(--navy);">0</div><div style="font-size:10px;color:var(--g500);">/ 15</div>
+            </div>
+            <div style="flex:1;min-width:120px;background:var(--g50);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:var(--g500);text-transform:uppercase;margin-bottom:4px;">Thân tình</div>
+              <div id="ts_inti" style="font-size:22px;font-weight:900;color:var(--navy);">0</div><div style="font-size:10px;color:var(--g500);">/ 15</div>
+            </div>
+            <div style="flex:1;min-width:120px;background:#fee2e2;border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;font-weight:700;color:#991b1b;text-transform:uppercase;margin-bottom:4px;">Vị kỷ ⚠️</div>
+              <div id="ts_self" style="font-size:22px;font-weight:900;color:#dc2626;">0</div><div style="font-size:10px;color:#991b1b;">/ 15</div>
+            </div>
+          </div>
+          <div style="background:var(--navy);border-radius:10px;padding:14px;text-align:center;margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:4px;">Trust Score của bạn</div>
+            <div id="ts_final" style="font-size:36px;font-weight:900;color:var(--yellow);">—</div>
+          </div>
+          <div id="ts_band" style="border-radius:10px;padding:12px 16px;text-align:center;font-size:12px;font-weight:700;display:none;"></div>
+        </div>
+      </div>
+
+      <!-- Phân loại kết quả -->
+      <div style="margin-top:16px;">
+        <div style="background:var(--navy);color:#fff;border-radius:10px 10px 0 0;padding:12px 16px;font-size:13px;font-weight:800;">📊 Phân loại kết quả</div>
+        <div style="border:1px solid var(--g200);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;">
+          <div style="display:flex;gap:0;background:var(--g100);padding:10px 14px;font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;border-bottom:1px solid var(--g200);">
+            <div style="flex:1;">Chỉ số</div><div style="flex:1.5;">Xếp loại</div><div style="flex:2.5;">Ý nghĩa thực chiến</div>
+          </div>
+          <div style="padding:12px 14px;border-bottom:1px solid var(--g100);background:#dcfce7;">
+            <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+              <div style="min-width:70px;font-size:12px;font-weight:800;color:#15803d;">Trên 10.0</div>
+              <div style="min-width:100px;font-size:12px;font-weight:700;color:#166534;">🏆 Bậc thầy Niềm tin</div>
+              <div style="flex:1;font-size:11px;color:#166534;line-height:1.6;">Khách hàng coi bạn là người thân. Tỷ lệ tái ký và giới thiệu (Referral) gần như 100%.</div>
+            </div>
+          </div>
+          <div style="padding:12px 14px;border-bottom:1px solid var(--g100);background:#fef9c3;">
+            <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+              <div style="min-width:70px;font-size:12px;font-weight:800;color:#92400e;">5.0 – 9.0</div>
+              <div style="min-width:100px;font-size:12px;font-weight:700;color:#78350f;">✅ Chuyên gia Đáng tin</div>
+              <div style="flex:1;font-size:11px;color:#78350f;line-height:1.6;">Bạn làm việc chuyên nghiệp, khách hàng yên tâm. Cần chú trọng thêm sự thân tình hoặc hạ thấp cái tôi.</div>
+            </div>
+          </div>
+          <div style="padding:12px 14px;border-bottom:1px solid var(--g100);background:#fff7ed;">
+            <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+              <div style="min-width:70px;font-size:12px;font-weight:800;color:#c2410c;">2.0 – 4.9</div>
+              <div style="min-width:100px;font-size:12px;font-weight:700;color:#9a3412;">⚠️ Người bán hàng thông thường</div>
+              <div style="flex:1;font-size:11px;color:#9a3412;line-height:1.6;">Khách hàng vẫn còn phòng thủ. Bạn có thể bị thay thế dễ dàng bởi một PT khác vui tính hơn hoặc rẻ hơn.</div>
+            </div>
+          </div>
+          <div style="padding:12px 14px;background:#fee2e2;">
+            <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+              <div style="min-width:70px;font-size:12px;font-weight:800;color:#991b1b;">Dưới 2.0</div>
+              <div style="min-width:100px;font-size:12px;font-weight:700;color:#7f1d1d;">🚨 Cảnh báo nguy hiểm</div>
+              <div style="flex:1;font-size:11px;color:#7f1d1d;line-height:1.6;">Bạn đang tập trung quá nhiều vào túi tiền của khách thay vì kết quả của họ. Niềm tin đang bị rạn nứt nghiêm trọng.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="actions-row">
+    <button class="btn-dl" onclick="downloadPDF('panel5','Form5_Trust_Score.pdf')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>Tải PDF – Trust Score
     </button>
   </div>
 </div>
@@ -635,7 +738,110 @@ function updateScore(){
   else{band.style.background='#fee2e2';band.style.color='#991b1b';band.textContent='🔴 Mối quan hệ BẤP BÊNH – Cần thực hiện Integrity Check ngay!';}
 }
 
-buildA();buildB();buildC();buildD();buildDays();buildChecklist();
+// ── TRUST SCORE DATA ──
+const trustSections=[
+  {
+    id:'cred', label:'Uy tín', scoreId:'ts_cred',
+    title:'1. Uy tín chuyên môn (Credibility)',
+    sub:'"Họ có tin mình giỏi không?"',
+    color:'#243267',
+    items:[
+      'Tôi có thể giải thích cơ chế giảm mỡ/đau lưng một cách đơn giản, không dùng thuật ngữ khó hiểu, khiến khách hàng gật đầu tâm đắc?',
+      'Tôi luôn cập nhật kiến thức mới (về dinh dưỡng, tập luyện cho nữ giới) và có thể trả lời thỏa đáng 90% các thắc mắc của khách?',
+      'Tôi có phong thái và ngoại hình của một chuyên gia (Gọn gàng, năng lượng, tác phong chuyên nghiệp)?',
+    ]
+  },
+  {
+    id:'reli', label:'Tin cậy', scoreId:'ts_reli',
+    title:'2. Sự tin cậy (Reliability)',
+    sub:'"Họ có tin mình sẽ thực hiện lời hứa không?"',
+    color:'#1a5e3a',
+    items:[
+      'Tôi có mặt tại sàn tập trước khách hàng ít nhất 5-10 phút để chuẩn bị sẵn sàng (nước, khăn, giáo án)?',
+      'Tôi luôn thực hiện đúng 100% các cam kết (gửi thực đơn đúng hẹn, theo dõi số đo hàng tuần, không hủy lịch đột xuất)?',
+      'Tôi luôn giữ được sự ổn định trong thái độ và chất lượng phục vụ, dù là buổi tập thứ 1 hay buổi tập thứ 50?',
+    ]
+  },
+  {
+    id:'inti', label:'Thân tình', scoreId:'ts_inti',
+    title:'3. Sự thân tình (Intimacy)',
+    sub:'"Họ có dám chia sẻ bí mật với mình không?"',
+    color:'#6b1a6b',
+    items:[
+      'Khách hàng có thoải mái chia sẻ với tôi những vấn đề nhạy cảm (kinh nguyệt, stress gia đình, sự tự ti cơ thể) mà không sợ bị phán xét?',
+      'Tôi tuyệt đối bảo mật thông tin cá nhân và những câu chuyện riêng tư của khách hàng, không bao giờ đem ra làm chủ đề bàn tán?',
+      'Tôi có khả năng nhận ra những thay đổi nhỏ về tâm trạng của khách hàng ngay khi họ vừa bước vào phòng tập?',
+    ]
+  },
+  {
+    id:'self', label:'Vị kỷ ⚠️', scoreId:'ts_self',
+    title:'4. Sự vị kỷ (Self-Orientation)',
+    sub:'"Kẻ hủy diệt niềm tin" – Điểm càng cao càng xấu!',
+    color:'#b5282a',
+    warning:true,
+    items:[
+      'Tôi có xu hướng nói về bản thân, thành tích của mình nhiều hơn là đặt câu hỏi để khách hàng chia sẻ?',
+      'Tôi cảm thấy sốt ruột và muốn "chốt" hợp đồng ngay cả khi thấy khách hàng vẫn còn những băn khoăn chưa được giải tỏa?',
+      'Khi tư vấn giải pháp, tôi ưu tiên những gói tập có hoa hồng cao hơn là những gói thực sự phù hợp với túi tiền và mục tiêu của khách?',
+    ]
+  },
+];
+
+function buildTrust(){
+  const el=document.getElementById('trustSections');
+  el.innerHTML=trustSections.map(sec=>`
+    <div style="margin-bottom:16px;">
+      <div style="background:${sec.color};color:#fff;border-radius:10px 10px 0 0;padding:10px 14px;">
+        <div style="font-size:12px;font-weight:800;">${sec.title}</div>
+        <div style="font-size:11px;opacity:.85;margin-top:2px;font-style:italic;">${sec.sub}</div>
+        ${sec.warning?'<div style="font-size:11px;background:rgba(255,255,255,.15);border-radius:4px;padding:4px 8px;margin-top:6px;">⚠️ Lưu ý: Với phần này, điểm càng cao nghĩa là bạn càng vị kỷ - điều này không tốt cho niềm tin</div>':''}
+      </div>
+      ${sec.items.map((item,i)=>`
+        <div style="border:1px solid ${sec.color}22;border-top:none;padding:12px 14px;${i%2===0?'background:#fff;':'background:var(--g50);'}${i===sec.items.length-1?'border-radius:0 0 10px 10px;':''}">
+          <div style="font-size:12px;color:var(--g800);line-height:1.6;margin-bottom:10px;">${item}</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:11px;font-weight:700;color:${sec.color};white-space:nowrap;">Điểm (1–5):</span>
+            <div style="display:flex;gap:6px;">
+              ${[1,2,3,4,5].map(v=>`
+                <label style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;">
+                  <input type="radio" name="trust_${sec.id}_${i}" value="${v}" onchange="calcTrust()" style="accent-color:${sec.color};width:18px;height:18px;">
+                  <span style="font-size:10px;font-weight:700;color:${sec.color};">${v}</span>
+                </label>`).join('')}
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function calcTrust(){
+  const sections={cred:[],reli:[],inti:[],self:[]};
+  trustSections.forEach(sec=>{
+    sec.items.forEach((item,i)=>{
+      const sel=document.querySelector(`input[name="trust_${sec.id}_${i}"]:checked`);
+      sections[sec.id].push(sel?parseInt(sel.value):0);
+    });
+  });
+  const sum=arr=>arr.reduce((a,b)=>a+b,0);
+  const C=sum(sections.cred),R=sum(sections.reli),I=sum(sections.inti),S=sum(sections.self);
+  document.getElementById('ts_cred').textContent=C;
+  document.getElementById('ts_reli').textContent=R;
+  document.getElementById('ts_inti').textContent=I;
+  document.getElementById('ts_self').textContent=S;
+  if(S>0){
+    const score=((C+R+I)/S).toFixed(1);
+    document.getElementById('ts_final').textContent=score;
+    const band=document.getElementById('ts_band');
+    band.style.display='block';
+    if(parseFloat(score)>10){band.style.background='#dcfce7';band.style.color='#15803d';band.textContent='🏆 Bậc thầy Niềm tin – Khách hàng coi bạn là người thân!';}
+    else if(parseFloat(score)>=5){band.style.background='#fef9c3';band.style.color='#92400e';band.textContent='✅ Chuyên gia Đáng tin – Cần chú trọng thêm sự thân tình hoặc hạ thấp cái tôi.';}
+    else if(parseFloat(score)>=2){band.style.background='#fff7ed';band.style.color='#c2410c';band.textContent='⚠️ Người bán hàng thông thường – Khách hàng vẫn còn phòng thủ.';}
+    else{band.style.background='#fee2e2';band.style.color='#991b1b';band.textContent='🚨 Cảnh báo nguy hiểm – Niềm tin đang bị rạn nứt nghiêm trọng!';}
+  } else {
+    document.getElementById('ts_final').textContent='—';
+  }
+}
+
+buildA();buildB();buildC();buildD();buildDays();buildChecklist();buildTrust();
 setTimeout(initResize,150);
 </script>
 </body>
